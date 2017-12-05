@@ -24,7 +24,7 @@ class Sql {
 
 	private function setParams($statement, $parameters = array())
 	{
-
+		//passa os parametros setados para o statement
 		foreach ($parameters as $key => $value) {
 			
 			$this->bindParam($statement, $key, $value);
