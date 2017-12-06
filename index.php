@@ -6,13 +6,14 @@ require_once("vendor/autoload.php");
 //namespaces precisas.
 use \Slim\Slim;
 use \Hcode\Page;
+use \Hcode\PageAdmin;
 
 //nova aplicação (rota).
 $app = new Slim();
 
 $app->config('debug', true);
 
-//rota principal
+//rota principal do site principal
 $app->get('/', function() {
 
 	//chama o construct, com as variaveis e o header da pagina.
@@ -20,6 +21,13 @@ $app->get('/', function() {
 	//chama o corpo da pagina.
 	$page->setTpl("index");
 	//o footer sera chamado quando terminar de carregar, que sera chamado o destruct.
+});
+
+//rota principal da administração
+$app->get('/admin', function() {
+
+	$page = new PageAdmin();
+	$page->setTpl("index");
 
 });
 
