@@ -1,12 +1,14 @@
 <?php 
 
 //vendor/autoload é do composer para trazer as dependencias.
+session_start();
 require_once("vendor/autoload.php");
 
 //namespaces precisas.
 use \Slim\Slim;
 use \Hcode\Page;
 use \Hcode\PageAdmin;
+use \Hcode\Model\User;
 
 //nova aplicação (rota).
 $app = new Slim();
@@ -26,9 +28,41 @@ $app->get('/', function() {
 //rota principal da administração
 $app->get('/admin', function() {
 
-	$page = new PageAdmin();
+	User::verifyLogin();
+
+	//lembrando que a função setTpl está na classe pai, que é Page.
+	//a função setTpl é modificada para usar o método draw do rainTPL.
+	//além disso, as variáveis são setadas(assign) na função setData.
+	$page = new Hcode\PageAdmin();
 	$page->setTpl("index");
 
+});
+
+$app->get('/admin/login', function(){
+
+	//passando duas opções header e footer false para desabilitar o construtor e o destrutor, que chamam o header e o footer da página, pois na página de login não há header e footer.
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+	$page->setTpl("login");
+
+});
+
+//rota para receber os dados do formulário de login.
+$app->post('/admin/login', function(){
+
+	//autenticar o usuario por método estático.
+	User::login($_POST["login"], $_POST["password"]);
+	header("Location: /admin");
+	exit;
+
+});
+
+$app->get('/admin/logout', function(){
+	User::logout();
+	header("Location: /admin/login");
+	exit;
 });
 
 $app->run();

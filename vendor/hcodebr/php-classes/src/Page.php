@@ -7,8 +7,10 @@ use Rain\Tpl;
 class Page{
 
 	private $tpl;
-	private $options = [];
+	private $options = []; //variáveis principais da página.
 	private $defaults = [
+		"header"=>true,
+		"footer"=>true,
 		"data"=>[]
 	];
 
@@ -33,7 +35,7 @@ class Page{
 		$this->setData($this->options["data"]);
 
 		//header da pagina chamado no construct.
-		$this->tpl->draw("header");
+		if($this->options["header"] === true) $this->tpl->draw("header");
 	}
 
 	//metodo otimizado para validar as variaveis.
@@ -55,7 +57,7 @@ class Page{
 	//rodape sera chamado no destruct.
 	public function __destruct(){
 
-		$this->tpl->draw("footer");
+		if($this->options["footer"] === true) $this->tpl->draw("footer");
 	}
 
 }
