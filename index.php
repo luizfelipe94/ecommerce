@@ -47,6 +47,9 @@ $app->get('/admin/login', function(){
 	]);
 	$page->setTpl("login");
 
+	echo $_SESSION[User::SESSION]["deslogin"];
+	echo $_SESSION[User::SESSION]["iduser"];
+
 });
 
 //rota para receber os dados do formulário de login.

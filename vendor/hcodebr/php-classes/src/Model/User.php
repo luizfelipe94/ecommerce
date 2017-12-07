@@ -38,7 +38,7 @@ class User extends Model{
 			$_SESSION[User::SESSION] = $user->getValues();
 
 			//retorna esta instância para caso o usuário logado precise dele.
-			return $user;
+			//return $user;
 
 		}else{
 
@@ -48,23 +48,27 @@ class User extends Model{
 
 	}
 
-	public static function verifyLogin($inadmin = true)
-	{	
-		if (
+	public static function verifyLogin($inadmin = true){
+
+		if(
 			!isset($_SESSION[User::SESSION])
-			|| 
+			||
 			!$_SESSION[User::SESSION]
 			||
 			!(int)$_SESSION[User::SESSION]["iduser"] > 0
 			||
-			(bool)$_SESSION[User::SESSION]["iduser"] !== $inadmin
-		) {
-			
+			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin
+		)
+
+		{
 			header("Location: /admin/login");
 			exit;
-
 		}
+	}
 
+	public static function logout(){
+		$_SESSION[User::SESSION] = null;
+		exit;
 	}
 
 }
